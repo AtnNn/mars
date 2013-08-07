@@ -18,9 +18,7 @@ x american flag
 x NASA rover
 x spaceman spiff
 x chocolat mars
-- peruvian bird drawings
-- hieroglyphs
-- tintin
+x peruvian bird drawings
 
 */
 
