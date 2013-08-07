@@ -1,23 +1,20 @@
 /* TODO
 
 x split map into tiles
-- flicker alert
-- satelite
-- sateite shadow
-- zoom out by clicking satelite, zoom in by going somewhere
-- asteroids-like movement, with alerts only when reaching edge
+x flicker alert
+x satelite
+x sateite shadow
+x asteroids-like movement, with alerts only when reaching edge
 - slow moving stars and celestial objects in the background
-- after out of range alert, recalculate location to not show the alert again
-- disable mouse drag of images
-- disable mouse selection of images
-- control satelite with mousedown
+x after out of range alert, recalculate location to not show the alert again
+x disable mouse drag of images
+x disable mouse selection of images
+x control satelite with mousedown
 
-- aliens (3 groups), two of which leave edge of map
-- flowing water
 - tardis
 - waldo
 - carmen san diego
-- happy birthday delani
+x happy birthday delani
 - american flag
 - NASA rover moving slowly + tracks
 - other satelites flying around
@@ -26,6 +23,10 @@ x split map into tiles
 - calendrier mars
 - chocolat mars
 - taurentula
+- peruvian bird drawings
+- flying spagghetti monster
+- hieroglyphs
+- tintin
 
 */
 
@@ -42,10 +43,11 @@ function init(){
 
     initmap();
 
-    //$('#main').mousedown(handle_down);
-    //$('#main').mouseup(handle_up);
-    $('#main').mousemove(handle_move);
+    $('#main').mousedown(handle_mouse(5));
+    $('#main').mouseup(handle_mouse(2));
+    $('#main').mousemove(handle_mouse(1));
 
+    setTimeout(info_messages,1000);
 }
 
 var map_tds = false;
@@ -55,25 +57,32 @@ function initmap(){
     for(x = 0; x < 78; x++){
         var tr = $('<tr>');
         for(y = 0; y < 131; y++){
-            var td = $('<td>').appendTo(tr).data(true);
+            var td = $('<td>').appendTo(tr).data('empty',true);
         }
         tr.appendTo($('#map'));
     }
     map_tds = $('#map td');
+    var h = $('#map').height();
+    var w = $('#map').width();
+    $('#map').css({
+        left: -w/2,
+        top: -h/2
+    });
+    loadtiles(w/2,h/2);
 }
 
-function loadtile(x, y){
-    var i = y * 131 + x;
+var active_tiles = {};
+
+function loadtile(i){
     var td = $(map_tds[i]);
-    if(!td.data()){
+    if(!td.data('empty')){
         return;
     }
-    $('<img>').attr({
-        src: 'map/tile-' + i + '.jpeg',
-        width: 181,
-        height: 152
-    }).appendTo(td).on('dragstart', function(ev){ ev.preventDefault(); });
-     td.data(false);
+    td.css({
+        'background-image': 'url(map/tile-' + i + '.jpeg)'
+    });
+    td.attr('i', i);
+    td.data('empty',false); 
 }
 
 last_load_x = -1;
@@ -84,41 +93,43 @@ function loadtiles(posx, posy){
     if(posx == last_load_x && posy == last_load_y){
         return;
     }
-    console.log('loadtiles',posx,posy);
     last_load_x = posx;
     last_load_y = posy;
     var x;
     var y;
-    var extra = 1;
+    var extra = 2;
     for(x = posx - extra; x < posx + 5 + extra; x++){
         for(y = posy - extra; y < posy + 4 + extra; y++){
-            loadtile(x, y);
+            var i = y * 131 + x; 
+            loadtile(i);
         }
     }
 }
 
-function handle_move(ev){
-    if(ev.buttons == 1){
-        var offset = $("#main").offset();
-        var h = $('#main').height();
-        var w = $('#main').width();
-        var pt =
-            [ev.pageX - offset.left - w/2,
-             ev.pageY - offset.top - h/2];
-        impulse_to(pt);
+function handle_mouse(amult){
+    return function(ev){
+        if(ev.which == 1 && (ev.buttons == 1 || ev.buttons == undefined)){
+            var offset = $("#main").offset();
+            var h = $('#main').height();
+            var w = $('#main').width();
+            var pt =
+                [ev.pageX - offset.left - w/2,
+                 ev.pageY - offset.top - h/2];
+            impulse_to(pt, amult);
+        }
+        ev.preventDefault();
     }
-    ev.preventDefault();
 }
 
 var impulse_timeout = false;
 var impulse_speed = [0,0];
-function impulse_to(pos){
+function impulse_to(pos, amult){
 
     var h = $('#main').height();
     var w = $('#main').width();
 
     var multiplier = 0.05;
-   impulse_acceleration = pos;
+   impulse_acceleration = [pos[0] * amult, pos[1] * amult];
 
     if(impulse_timeout){
         return;
@@ -128,9 +139,9 @@ function impulse_to(pos){
     ticker = function(){
         var pos = $('#map').position();
 
-        var multiplier = 0.1;
+        var multiplier = 0.02;
         var decay = 0.99;
-        var spmult = 1/120;
+        var spmult = 1/160;
 
         var xdiff = impulse_acceleration[0] * multiplier;
         var ydiff = impulse_acceleration[1] * multiplier;
@@ -139,8 +150,12 @@ function impulse_to(pos){
         impulse_acceleration[0] -= xdiff;
         impulse_acceleration[1] -= ydiff;
 
-        var posx = -cappos(pos.left - impulse_speed[0] * spmult, -$('#map').width()+w, 0);
-        var posy = -cappos(pos.top - impulse_speed[1] * spmult, -$('#map').height()+h, 0);
+        var posx = -cappos(pos.left - impulse_speed[0] * spmult, -$('#map').width()+w, 0, function(){
+            impulse_speed[0] = impulse_acceleration[0] = 0; 
+        });
+        var posy = -cappos(pos.top - impulse_speed[1] * spmult, -$('#map').height()+h, 0, function(){
+            impulse_speed[1] = impulse_acceleration[1] = 0; 
+        });
 
         loadtiles(posx, posy);
 
@@ -149,7 +164,7 @@ function impulse_to(pos){
             top: -posy
         });
 
-        if(impulse_speed[0] < 1 && impulse_speed[1] < 1){
+        if(Math.abs(impulse_speed[0]) < 1 && Math.abs(impulse_speed[1]) < 1){
             clearTimeout(impulse_timeout);
             impulse_timeout = false;
         }else{
@@ -168,7 +183,7 @@ function cap(x, a, b){
     return x < a ? a : x > b ? b : x;
 }
 
-function cappos(x, a, b){
+function cappos(x, a, b, f){
     if(x < a){
         x = a;
     }else if (x > b){
@@ -176,21 +191,33 @@ function cappos(x, a, b){
     }else{
         return x;
     }
+    f();
     show_alert('GRID COORDINATE OUT OF RANGE');
     return x;
 }
 
-var alert_timeout = false;
-function show_alert(message){
-    if(alert_timeout){
-        clearTimeout(alert_timeout);
-        alert_timeout = false;
+function info_messages(){
+    var msg;
+    if(messages.length == 0){
+        msg = [extra_messages[Math.floor(Math.random() * extra_messages.length)], Math.random() * 120 + 120];
+    }else{
+        msg = messages.shift();
     }
-    $('#alert').text(message);
-    $('#alert').show();
-    alert_timeout = setTimeout(function(){
-        $('#alert').fadeOut();
-    }, 2000);
+    show_alert(msg[0]);
+    setTimeout(info_messages, msg[1]*1000);
+}
+
+function show_alert(message){
+    var al = $('#alert');
+    al.hide();
+    al.finish();
+    al.text(message);
+    al.fadeIn(50).delay(200).
+        fadeOut(50).delay(50).
+        fadeIn(50).delay(200).
+        fadeOut(50).delay(50).
+        fadeIn(50).delay(2000).
+        fadeOut(200);
 }
 
 function dist(a, b){
@@ -200,3 +227,17 @@ function dist(a, b){
 }
 
 $(init);
+
+messages = [
+    ["ACQUIRING CONTROL OF SATELLITE", 7],
+    ["SATELLITE CONTROL ACQUIRED", 7],
+    ["WELCOME TO THE PLANET MARS", 7],
+    ["DO NOT LEAVE THE VALLES MARINERIS REGION", 70]
+];
+
+extra_messages = [
+    "BEWARE OF INVISIBLE UNICORNS",
+    "SOLAR IRRADIANCE IS CURRENTLY  589.2 W/M^2",
+    "TEMPERATURE IS CURRENTLY -30 F",
+    "SPONSORED BY JOHNNYCAB! WE HOPE YOU'VE ENJOYED THE RIDE"
+];

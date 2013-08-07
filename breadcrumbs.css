@@ -30,6 +30,7 @@ body {
     top: 50%;
     left: 50%;
     overflow: hidden;
+    background-image: url("loading.png");
 }
 
 #map {
@@ -46,15 +47,26 @@ body {
     background-image: url("loading.png");
 }
 
-#hero {
+#satelite {
     position: absolute;
-    width: 50px;
-    height: 50px;
-    background-color: red;
-    margin-top: -25px;
-    margin-left: -25px;
+    width: 100px;
+    height: 127px;
+    margin-top: -63px;
+    margin-left: -50px;
     top: 50%;
     left: 50%;
+    background-image: url("satelite.png");
+}
+
+#shadow {
+    position: absolute;
+    width: 30px;
+    height: 38px;
+    margin-top: -15px;
+    margin-left: -19px;
+    top: 50%;
+    left: 65%;
+    background-image: url("satelite-shadow.png");
 }
 
 #alert {
@@ -64,7 +76,7 @@ body {
     font-weight: bold;
     top: 50%;
     line-height: 50px;
-    font-family: fixed; /* TODO: monospace or fixed? */
+    font-family: monospace;
     text-align: center;
     color: #cc1111;
     font-size: 40px;
