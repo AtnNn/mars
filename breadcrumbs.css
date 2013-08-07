@@ -1,0 +1,72 @@
+body, body * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-size: inherit;
+    vertical-align: baseline;
+    list-style: none;
+    line-height: 1;
+}
+
+img {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body {
+    background-color: #000000;
+}
+
+#main {
+    position: absolute;
+    width: 900px;
+    height: 600px;
+    border: 3px solid #ddddff;
+    border-radius: 20px;
+    margin-top: -330px; /* height / 2 + border - 25*/
+    margin-left: -455px;
+    top: 50%;
+    left: 50%;
+    overflow: hidden;
+}
+
+#map {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: 23711px;
+    height: 11856px;
+}
+
+#map td {
+    height: 152;
+    width: 181;
+    background-image: url("loading.png");
+}
+
+#hero {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    margin-top: -25px;
+    margin-left: -25px;
+    top: 50%;
+    left: 50%;
+}
+
+#alert {
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    font-weight: bold;
+    top: 50%;
+    line-height: 50px;
+    font-family: fixed; /* TODO: monospace or fixed? */
+    text-align: center;
+    color: #cc1111;
+    font-size: 40px;
+    margin-top: 280px;
+}
