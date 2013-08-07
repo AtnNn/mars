@@ -48,6 +48,25 @@ function init(){
     $('#main').mousemove(handle_mouse(1));
 
     setTimeout(info_messages,1000);
+
+    slowlyRotate();
+}
+
+var rot_angle = 0;
+var rot_direction = 0.3;
+function slowlyRotate(){
+    var t = 'rotate(' + rot_angle + 'deg)';
+    $('#satelite, #shadow').css({
+        'transform': t,
+        '-mox-transform': t,
+        '-o-transform': t,
+        '-ms-transform': t
+    });
+    rot_angle += rot_direction;
+    if(Math.abs(rot_angle) > 20){
+        rot_direction = -rot_direction
+    }
+    setTimeout(slowlyRotate, 1000);
 }
 
 var map_tds = false;
