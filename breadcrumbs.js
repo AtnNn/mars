@@ -15,14 +15,10 @@ x tardis
 x waldo
 x happy birthday delani
 x american flag
-- NASA rover
+x NASA rover
 x spaceman spiff
-- bruno mars
-- calendrier mars
-- chocolat mars
-- taurentula
+x chocolat mars
 - peruvian bird drawings
-- flying spagghetti monster
 - hieroglyphs
 - tintin
 
@@ -257,9 +253,9 @@ extra_messages = [
     "SOLAR IRRADIANCE IS CURRENTLY  589.2 W/M^2",
     "TEMPERATURE IS CURRENTLY -30 F",
     "SPONSORED BY JOHNNYCAB! WE HOPE YOU'VE ENJOYED THE RIDE",
-    "HAVE YOU LOCATED THE TARDIS?",
+    "TIME TRAVEL IS ILLEGAL",
     "HAVE YOU FOUND WALDO?",
-    "HAVE YOU SEEN SPACEMAN SPIFF?",
-    "HAVE YOU FOUND THE FLAG?",
-    "HAVE YOU LOCATED THE ROVER?"
+    "LOST AND FOUND: A STUFFED TIGER",
+    "REPORT ALL GRAFFITI TO THE MARS POLICE",
+    "NO LITTERING - 500$ FINE"
 ];
