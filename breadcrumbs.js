@@ -11,14 +11,12 @@ x disable mouse drag of images
 x disable mouse selection of images
 x control satelite with mousedown
 
-- tardis
-- waldo
-- carmen san diego
+x tardis
+x waldo
 x happy birthday delani
-- american flag
-- NASA rover moving slowly + tracks
-- other satelites flying around
-- spaceman spiff
+x american flag
+- NASA rover
+x spaceman spiff
 - bruno mars
 - calendrier mars
 - chocolat mars
@@ -258,5 +256,10 @@ extra_messages = [
     "BEWARE OF INVISIBLE UNICORNS",
     "SOLAR IRRADIANCE IS CURRENTLY  589.2 W/M^2",
     "TEMPERATURE IS CURRENTLY -30 F",
-    "SPONSORED BY JOHNNYCAB! WE HOPE YOU'VE ENJOYED THE RIDE"
+    "SPONSORED BY JOHNNYCAB! WE HOPE YOU'VE ENJOYED THE RIDE",
+    "HAVE YOU LOCATED THE TARDIS?",
+    "HAVE YOU FOUND WALDO?",
+    "HAVE YOU SEEN SPACEMAN SPIFF?",
+    "HAVE YOU FOUND THE FLAG?",
+    "HAVE YOU LOCATED THE ROVER?"
 ];
